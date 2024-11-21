@@ -12,21 +12,16 @@ jobs:
     steps:
     # 1 Configuração do ambiente
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: '16'
 
     - name: Install dependencies
       run: |
         npm install axios
-
-    # 2 Execução do Script
-    - name: Run CEP request script
-      run: |
-        node app.js
 
     # 3 Validação da resposta
     - name: Validate response
@@ -36,4 +31,4 @@ jobs:
     # 4 Exibição dos Dados
     - name: Display CEP data
       run: |
-        node exibeCep.js
+        node app.js
