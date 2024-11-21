@@ -1,4 +1,4 @@
-name: Testar servidor Node.js
+name: Pipeline ViaCep
 
 on:
   push:
@@ -6,32 +6,36 @@ on:
       - main
 
 jobs:
-  build_and_run:
+  request-cep:
     runs-on: ubuntu-latest
-  
-    steps:
-    # Passo 1: Checkout
-    - name: Checkout do código
-      uses: actions/checkout@v3
 
-    # Passo 2: Configurar Node.js
-    - name: Configurar Node.js
-      uses: actions/setup-node@v3
+    steps:
+    # 1. Configuração do ambiente
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
       with:
         node-version: '16'
 
-    # Passo 3: Instalar as dependências
-    - name: Instalar as dependências
-      run: npm install
-    
-    # Passo 4: Rodar o servidor
-    - name: Rodar o servidor
+    - name: Install dependencies
       run: |
-        nohup node app.js &
-        echo "Servidor rodando em segundo plano..."
-    
-    # Passo 5: Testar se o servidor está funcionando
-    - name: Testar se o servidor está funcionando
+        npm install axios
+
+    # 2. Execução do Script com Axios
+    - name: Run CEP request script
       run: |
-        sleep 10 # Espera o servidor iniciar
-        curl http://localhost:3000 # Verifica se o servidor responde 
+        node consultaCep.js
+
+    # 3. Validação da resposta
+    - name: Validate response
+      run: |
+        # Aqui, o script deve validar se a resposta está no formato correto
+        # Pode-se utilizar um simples check de status HTTP ou verificação de conteúdo no corpo
+        curl -s -o /dev/null -w "%{http_code}" https://viacep.com.br/ws/01001000/json/
+    
+    # 4. Exibição dos Dados
+    - name: Display CEP data
+      run: |
+        node exibeCep.js
