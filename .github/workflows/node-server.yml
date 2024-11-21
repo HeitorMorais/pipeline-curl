@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Configuração do ambiente
+    # 1 Configuração do ambiente
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -23,19 +23,17 @@ jobs:
       run: |
         npm install axios
 
-    # 2. Execução do Script com Axios
+    # 2 Execução do Script
     - name: Run CEP request script
       run: |
-        node consultaCep.js
+        node app.js
 
-    # 3. Validação da resposta
+    # 3 Validação da resposta
     - name: Validate response
       run: |
-        # Aqui, o script deve validar se a resposta está no formato correto
-        # Pode-se utilizar um simples check de status HTTP ou verificação de conteúdo no corpo
         curl -s -o /dev/null -w "%{http_code}" https://viacep.com.br/ws/01001000/json/
     
-    # 4. Exibição dos Dados
+    # 4 Exibição dos Dados
     - name: Display CEP data
       run: |
         node exibeCep.js
